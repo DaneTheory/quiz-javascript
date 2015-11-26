@@ -1,38 +1,27 @@
-var textArr;
+(function() {
 
-$(function() {
-  // Looks like there's a few billion span tags.
-  // Those hidden attributes look suspicious...
+	var TheQuestion = {
 
-  function gottaCatchEmAll(question){
-
-    this.hiddenEls = document.querySelectorAll('span[hidden]');
-
-    this.question = !function(){
-      Array.prototype.map.call(hiddenEls, function(el, i){
-      // Ah HAH! A message. Let's clean this up in the console.
-      //
-      // Using the .map instead of a .forEach on the prototype
-      // is faster and better formats output in console.
-      //
-      // Create new array textArr...
-      textArr = [];
-          // ...to hold the strings created here.
-      this.hiddenText = hiddenEls[i].textContent.split(',').join("");
-
-      // Hidden text string to array.
-      textArr.push(hiddenText);
-      console.log(textArr);
-        return textArr;
-    })
-   }()
+		gottaCatchEmAll: function(selector) {
+        // var nodes = document.querySelectorAll(selector);
+        // console.log(({}).toString.call(nodes).match(/\s([a-zA-Z]+)/)[1].toLowerCase());
+        // RETURNS nodelist
+	      var convertArr = Array.prototype.slice.call(document.querySelectorAll(selector));
+        // console.log(({}).toString.call(convertArr).match(/\s([a-zA-Z]+)/)[1].toLowerCase());
+        // RETURNS array
+        //
+        var sentence = [];
+        convertArr.forEach(function(el) {
+          var letters = el.textContent;
+          sentence.push(letters);
+        })
+        var hiddenMessage = sentence.join("");
+        // console.log(({}).toString.call(hiddenMessage).match(/\s([a-zA-Z]+)/)[1].toLowerCase());
+        // RETURNS string
+        //
+        return hiddenMessage;
+		}
   }
-  gottaCatchEmAll(gottaCatchEmAll.textArr);
-
-  function theQuestion(question){
-    console.log(textArr);
-  }
-  theQuestion();
-
-});
-
+	TheQuestion.gottaCatchEmAll('span[hidden]');
+  console.log(TheQuestion.gottaCatchEmAll('span[hidden]'));
+})();
