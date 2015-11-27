@@ -87,5 +87,4 @@ var TheQuestion = (function() {
 
 }(cypherKey));
 
-// TheQuestion.gottaCatchEmAll();
 TheQuestion.init();
