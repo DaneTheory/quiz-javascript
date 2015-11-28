@@ -354,13 +354,6 @@ td,
 th {
   padding: 0; }
 
-html {
-  background-color: #0c0a0e;
-  font-family: "M+ 1mn", "VT323", monospace;
-  font-size: 1vmax;
-  line-height: 0.6em;
-  overflow: hidden; }
-
 .quote {
   cursor: default;
   color: #00331a;

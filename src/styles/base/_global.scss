@@ -7,13 +7,13 @@ $font: "M+ 1mn", "VT323", monospace;
 // Get this ^ font.
 // Seriously. It's the best.
 
-html {
-  background-color: rgb(12,10,14);
-  font-family: $font;
-  font-size:1vmax;
-  line-height: 0.6em;
-  overflow: hidden;
-}
+// html {
+//   background-color: rgb(12,10,14);
+//   font-family: $font;
+//   font-size:1vmax;
+//   line-height: 0.6em;
+//   overflow: hidden;
+// }
 .quote {
   cursor: default;
   color: $quoteText;
