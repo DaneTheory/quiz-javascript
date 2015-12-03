@@ -178,91 +178,61 @@
 //
 // }()).init2();
 
-// UTILITY FUNCTIONS
+
+
+// function generateSpans(){
 //
-// Set Multiple Attributes
-// In Object Literal Format
-var frag = document.createDocumentFragment();
-
-function setAttributes(el, attrs) {
-  for(var key in attrs) {
-    el.setAttribute(key, attrs[key]);
-  }
-}
-
-function shuffle(elems) {
-    allElems = (function(){
-  var ret = [], l = elems.length;
-  while (l--) { ret[ret.length] = elems[l]; }
-  return ret;
-    })();
-
-    var shuffled = (function(){
-        var l = allElems.length, ret = [];
-        while (l--) {
-            var random = Math.floor(Math.random() * allElems.length),
-                randEl = allElems[random].cloneNode(true);
-            allElems.splice(random, 1);
-            ret[ret.length] = randEl;
-        }
-        return ret;
-    })(), l = elems.length;
-
-    while (l--) {
-        elems[l].parentNode.insertBefore(shuffled[l], elems[l].nextSibling);
-        elems[l].parentNode.removeChild(elems[l]);
-    }
-}
-
-function generateSpans(){
-
-  var mainContainer = document.getElementById("mainContainer");
-
-  var hiddenMessageVal = document.getElementById("encrypter").value;
-    console.log('VALUE FROM INPUT FIELD: ' + hiddenMessageVal);
-
-  var hiddenMessageLength = hiddenMessageVal.length;
-    console.log('LENGTH FROM INPUT FIELD: ' + hiddenMessageLength);
-
-  var allSpans = (hiddenMessageLength / 0.05 - hiddenMessageLength);
-    console.log('EXTRA SPANS ' + allSpans);
-
-    for (var j = 0, len2 = hiddenMessageLength; j < len2; j++) {
-      var hiddenSpans = document.createElement("SPAN");
-      setAttributes(hiddenSpans, {
-          "type": "text",
-          "hidden": ""
-      })
-      hiddenSpans.textContent = hiddenMessageVal[j];
-      frag.appendChild(hiddenSpans);
-    }
-
-    for (var i = 0, len = allSpans; i < len; i++) {
-        var spans = document.createElement("SPAN");
-        setAttributes(spans, {
-            "type": "text"
-        })
-        frag.appendChild(spans);
-        //console.log(spans);
-    }
-
-    mainContainer.appendChild( frag.cloneNode(true) );
+//   var i = 0, j = 0, e = 0;
+//   var mainContainer = document.getElementById("mainContainer");
+//   var hiddenMessageVal = document.getElementById("encrypter").value;
+//   var hiddenMessageLength = hiddenMessageVal.length;
+//   var allSpans = (hiddenMessageLength / 0.05 - hiddenMessageLength);
+//   var containerLength = mainContainer.childNodes.length;
+//
+//         for (i, len = allSpans; i < len; i++) {
+//             var randomSpans = document.createElement("SPAN");
+//             setAttributes(randomSpans, {
+//                 "type": "text"
+//             })
+//             // randomSpans.textContent = 'Q';
+//             frag.appendChild(randomSpans);
+//             // console.log(frag);
+//         }
+//
+//         for (j, len2 = hiddenMessageLength; j < len2; j++) {
+//             var hiddenSpans = document.createElement("SPAN");
+//                 setAttributes(hiddenSpans, {
+//                     "type": "text",
+//                     "hidden": ""
+//                 })
+//              // hiddenSpans.textContent = hiddenMessageVal[j];
+//                 frag.appendChild(hiddenSpans);
+//                 // console.log(frag);
+//         }
+//
+//         for (e, len3 = containerLength; e < len3; e++){
+//             var random = Math.floor((Math.random() * --containerLength));
+//             frag.appendChild(mainContainer.childNodes[random]);
+//         }
+//
+//               mainContainer.appendChild( frag );
+// }
     // console.log(mainContainer);
-
-    if (frag.hasChildNodes()) {
-        var i=0;
-        var myEl;
-        var children = frag.childNodes;
-        for (var r = 0; r < children.length; r++) {
-            if (children[r].hasAttribute("hidden")) {
-                myEl = children[r];
-
-                shuffle( document.getElementsByTagName('span') );
-            }
-        }
-    }
-
-  }
+  //
+  //   if (frag.hasChildNodes()) {
+  //       var i=0;
+  //       var myEl;
+  //       var children = frag.childNodes;
+  //       for (var r = 0; r < children.length; r++) {
+  //           if (children[r].hasAttribute("hidden")) {
+  //               myEl = children[r];
+  //
+  //               shuffle( document.getElementsByTagName('span') );
+  //           }
+  //       }
+  //   }
+  //
+  // }
     // console.log(myEl.innerHTML);
 
     // if (d.hasAttribute("align")) {
@@ -327,70 +297,212 @@ function generateSpans(){
     //           }
 
 
+// GLOBAL VARS
+var uiDocFrag = document.createDocumentFragment();
+var msgDocFrag = document.createDocumentFragment();
+var message = '';
+var containerLength = 0;
+
+// UTILITY FUNCTIONS
+//
+// Set Multiple Attributes
+// In Object Literal Format
+function setAttributes(el, attrs) {
+  for(var key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+}
+
+function randoCharGenerator() {
+var randomChars = "abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWXYZ!@#$%^&*()?{[}]|";
+var minChars = 1;
+var maxChars = 1;
+  randomChars = randomChars.replace(/\s/g,"");
+  minChars = parseInt(minChars);
+  maxChars = parseInt(maxChars);
+    if( maxChars < minChars ) { maxChars = minChars; }
+var charsLen = randomChars.length;
+var strLen = 0;
+    if( maxChars == minChars ) { strLen = minChars; }
+      else { strLen = Math.floor(Math.random()*(maxChars-minChars+1)) + minChars; }
+var randoStr = new String();
+  while( randoStr.length < strLen ) { randoStr += randomChars.charAt(Math.floor(Math.random()*charsLen)); }
+    return randoStr;
+}
 
 
-var enterTheMatrix = (function(){
+var buildUserInterface = (function(){
+  var docBody = document.querySelector('body');
 
   function init(){
-    console.log('  init START 1');
     generateInterface();
-    generateSpans();
-
-      console.log('  init DONE 1');
   }
 
   function generateInterface(){
-    console.log('   generateInterface START 2');
         txtInputInterface();
         bttnInputInterface();
         containerInterface();
-        document.body.insertBefore(frag, document.body.firstChild);
-
-          console.log('   generateInterface DONE 2');
+        docBody.insertBefore(uiDocFrag, docBody.firstChild);
   }
 
   function txtInputInterface(){
-    console.log('    txtInputInterface START 3');
-      var txtInptEl = document.createElement("INPUT");
+      var txtInptEl = document.createElement("TEXTAREA");
         setAttributes(txtInptEl, {
             "type": "text",
             "id": "encrypter",
             "name": "hiddenMessage",
-            "placeholder": "Add Message To Encrypt",
-            "autofocus": "autofocus",
-            "required": "required",
-            "value": ""
+            "placeholder": "Add Message To Encrypt"
         });
-        frag.appendChild(txtInptEl);
+          uiDocFrag.appendChild(txtInptEl);
 
-          console.log('    txtInputInterface DONE 3');
   }
 
   function bttnInputInterface(){
-    console.log('     bttnInputInterface START 4');
-      var bttnInptEl = document.createElement("BUTTON");
-          setAttributes(bttnInptEl, {
-              "onclick": "generateSpans()"
+      var bttnEncrypt = document.createElement("BUTTON");
+          setAttributes(bttnEncrypt, {
+              "id": "bttnEncrypt"
           });
-          bttnInptEl.textContent = 'ENCRYPT';
-          frag.appendChild(bttnInptEl);
+          bttnEncrypt.textContent = 'ENCRYPT';
+          uiDocFrag.appendChild(bttnEncrypt);
 
-            console.log('     bttnInputInterface DONE 4');
+      var bttnDecrypt = document.createElement("BUTTON");
+              setAttributes(bttnDecrypt, {
+                  "id": "bttnDecrypt"
+              });
+              bttnDecrypt.textContent = 'DECRYPT';
+              uiDocFrag.appendChild(bttnDecrypt);
+
+      var bttnReset = document.createElement("BUTTON");
+              setAttributes(bttnReset, {
+                  "id": "bttnReset"
+              });
+              bttnReset.textContent = 'RESET';
+              uiDocFrag.appendChild(bttnReset);
   }
 
   function containerInterface(){
-    console.log('      containerInterface START 5');
       var containerEl = document.createElement("DIV");
           setAttributes(containerEl, {
               "id": "mainContainer"
           });
-          frag.appendChild(containerEl);
-
-            console.log('      containerInterface DONE 5');
+          uiDocFrag.appendChild(containerEl);
   }
-
 
       return { interface:init }
 
-}()).interface(console.log('INTERFACE SCRIPT LAUNCH!!!!!!!!!!!!!!!!!!!!!!'));
+}());
+
+
+var buildGenerator = (function() {
+
+  function init() {
+    bindEvents();
+    elemsGenerator();
+  }
+
+
+  function elemsGenerator(randoChar){
+    var mainContainer = document.getElementById("mainContainer");
+    var i = 0, j = 0, e = 0;
+    var hiddenMsg = document.getElementById('encrypter').value;
+    var hiddenMsgLen = hiddenMsg.length;
+    var visibleElems = hiddenMsgLen / 0.05;
+    var docFragLength = msgDocFrag.childNodes.length;
+    var rando = Math.floor(Math.random() * (visibleElems - hiddenMsgLen) + hiddenMsgLen);
+    var containerFrag = document.createDocumentFragment();
+
+
+
+          for (i, len = hiddenMsgLen; i < len; i++) {
+              var hSpans = document.createElement("SPAN");
+                  setAttributes(hSpans, {
+                      "type": "text",
+                      "hidden": ""
+                  })
+                  // hSpans.textContent = hiddenMsg[i];
+                  msgDocFrag.appendChild(hSpans);
+          }
+
+          for (j, len2 = rando; j < len2; j++) {
+              var vSpans = document.createElement("SPAN");
+              setAttributes(vSpans, {
+                  "type": "text"
+              })
+              vSpans.textContent = randoCharGenerator();
+              msgDocFrag.appendChild(vSpans);
+          }
+
+          for (var l = msgDocFrag.childNodes.length - 1; l > 0; l--) {
+              var k = Math.floor(Math.random() * (l + 1));
+              var temp = msgDocFrag.childNodes[l];
+              msgDocFrag.childNodes[l] = msgDocFrag.childNodes[k];
+              msgDocFrag.childNodes[k] = temp;
+              containerFrag.appendChild(msgDocFrag.childNodes[k]);
+          }
+
+
+          if ( !mainContainer.hasChildNodes() && !containerFrag.hasChildNodes() ) {
+              document.getElementById("bttnEncrypt").style.display = "";
+              document.getElementById("bttnDecrypt").style.display = "none";
+              document.getElementById("bttnReset").style.display = "none";
+
+          } else if ( !mainContainer.hasChildNodes() && containerFrag.hasChildNodes() ){
+              mainContainer.appendChild(containerFrag);
+              addHiddenMessage();
+              document.getElementById("bttnEncrypt").style.display = "";
+              document.getElementById("bttnDecrypt").style.display = "";
+              document.getElementById("bttnReset").style.display = "";
+          } else if ( mainContainer.hasChildNodes() && containerFrag.hasChildNodes() ){
+              mainContainer.innerHTML = '';
+              mainContainer.appendChild(containerFrag);
+              addHiddenMessage()
+          }
+
+          function addHiddenMessage() {
+            var hdnMsg = document.querySelectorAll("span[hidden]"),
+            q = 0;
+              for (q, len4 = hdnMsg.length; q < len4; q++) {
+                  hdnMsg[q].textContent = hiddenMsg[q];
+              }
+          }
+      }
+
+      function decrypt() {
+            var spanFinder = document.getElementsByTagName('span'),
+            i = 0;
+
+        for (i = 0; i < spanFinder.length; i++) {
+            if (spanFinder[i].hasAttribute('hidden')) {
+                spanFinder[i].removeAttribute('hidden');
+            } else {
+              spanFinder[i].setAttribute('hidden', '');
+            }
+        }
+      }
+
+    function reset() {
+      document.getElementById("bttnEncrypt").style.display = "";
+      document.getElementById("bttnDecrypt").style.display = "none";
+      document.getElementById("bttnReset").style.display = "none";
+      document.getElementById("encrypter").value = "";
+      elemsGenerator();
+      mainContainer.innerHTML = '';
+    }
+
+    function bindEvents(e) {
+      var bttnE = document.getElementById('bttnEncrypt');
+      var bttnD = document.getElementById('bttnDecrypt');
+      var bttnR = document.getElementById('bttnReset');
+
+        bttnE.addEventListener('click', elemsGenerator, false);
+        bttnD.addEventListener('click', decrypt, false);
+        bttnR.addEventListener('click', reset, false);
+    }
+
+        return { generate:init }
+
+}());
+
+buildUserInterface.interface();
+buildGenerator.generate();
 
