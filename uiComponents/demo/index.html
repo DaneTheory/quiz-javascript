@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Styling SVG with CSS (Demo)</title>
+
+	<link rel="stylesheet" href="normalize.css">
+
+	<!-- External Stylesheet -->
+	<link rel="stylesheet" type="text/css" href="style.css">
+	
+	<!-- Internal Style Sheet -->
+	<style type="text/css" media="screen">
+		#internal rect {
+			fill: slategrey;
+			stroke: black;
+			stroke-width: 3;
+			-webkit-transition: all 350ms;
+		}
+		#internal rect:hover {
+			fill: green;
+		}
+	</style>
+</head>
+<body>
+
+<div id="wrapper">
+
+<h1>SVG Styling - Demo</h1>
+
+<h4>This rectangle is affected by the presentation attributes</h4>
+<!-- Presentation Attribute -->
+<section id="att">
+<svg>
+	<rect width="200" height="200" fill="slategrey" stroke="black" stroke-width="3"/>
+</svg>
+<pre>
+&lt;svg&gt;
+&lt;rect width="200" height="200" fill="slategrey" stroke="black" stroke-width="3"/&gt;
+&lt;/svg&gt;
+</pre>
+</section>
+
+<!-- Inline Styles -->
+<section id="inline">
+<h4>This rectangle is affected by the inline styles</h4>
+<svg>
+	<rect x="0" y="0" width="200" height="200" style="fill:slategrey; stroke:black; stroke-width:3; -webkit-transform: rotate(45deg); -webkit-transform-origin:35% 100%;"/>
+</svg>
+<pre>
+&lt;svg&gt;
+&lt;rect x="203" width="200" height="200" style="fill:slategrey; stroke:black; stroke-width:3; -webkit-transform: rotate(45deg);"/&gt;
+&lt;/svg&gt;
+</pre>
+</section>
+
+<!-- Internal Style -->
+<section id="internal">
+<h4>This rectangle is affected by the internal styles; <em>Hover over it</em>.</h4>
+<svg>
+	<rect width="200" height="200"/>
+</svg>
+<pre>
+&lt;svg&gt;
+&lt;rect width="200" height="200"/&gt;
+&lt;/svg&gt;
+</pre>
+</section>
+
+<!-- Grouping -->
+<section id="grouping">
+<h4>The elements below are affected by the styles on <code>&lt;g&gt;</code> element.</h4>
+<svg>
+	<g style="fill:slategrey; stroke:black; stroke-width:3; fill-opacity: 0.5;">
+		<rect x="203" width="200" height="200"/>
+		<circle cx="120" cy="106" r="100"/>
+	</g>
+</svg>
+<pre>
+&lt;svg&gt;
+&lt;g style="fill:slategrey; stroke:black; stroke-width:3; fill-opacity: 0.5;"&gt;
+&lt;rect x="203" width="200" height="200"/&gt;
+&lt;circle cx="120" cy="106" r="100"/&gt;
+&lt;/g&gt;
+&lt;/svg>
+</pre>
+</section>
+</div>
+</body>	
+</html>

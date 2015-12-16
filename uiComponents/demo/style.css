@@ -1,0 +1,20 @@
+html {
+	background-color: rgb(245,245,245);
+}
+svg {
+	height: 300px;
+}
+#wrapper {
+	width: 500px;
+	margin: 0 auto;
+}
+section {
+	margin-bottom: 150px;
+}
+pre	{
+	white-space: pre;
+}
+h4 {
+	padding-bottom: 20px;
+	border-bottom: 1px solid #ccc;
+}

@@ -11,11 +11,20 @@
 
 // Import Components
 @import 'components/animations';
+@import 'components/glitchy';
 
 @import 'base/global';
 
+@import 'base/helpers';
+
+@import 'base/fonts';
+@import 'base/colors';
+
 // Import Layouts
-// @import 'layouts/matrix';
+@import 'layouts/matrix';
+@import 'layouts/screener';
+@import 'layouts/textarea';
+@import 'layouts/mainBttn';
 // @import 'layouts/input';
 
 // Import Plugins

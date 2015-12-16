@@ -1,0 +1,50 @@
+@mixin txtGlitcher($name, $intensity, $textColor, $background, $highlightColor1, $highlightColor2, $width, $height) {
+
+  color: $textColor;
+  position: relative;
+  $steps: $intensity;
+
+  @at-root {
+    @for $i from 1 through 2 {
+      @keyframes #{$name}-anim-#{$i} {
+        @for $i from 0 through $steps {
+          #{percentage($i*(1/$steps))} {
+            clip: rect(
+              random($height)+px,
+              $width+px,
+              random($height)+px,
+              0
+            );
+          }
+        }
+      }
+    }
+  }
+  &:before,
+  &:after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: $background;
+    opacity: 1;
+    clip: rect(0, 0, 0, 0);
+  }
+  &:after {
+    left: 2px;
+    font-size: 0.75em;
+    font-family: 'hackbold';
+    width: 80%;
+    text-shadow: -2px 0 $highlightColor1;
+    animation: #{$name}-anim-1 1.3s infinite linear alternate-reverse;
+  }
+  &:before {
+    left: -2px;
+    font-size: 1.75em;
+    font-family: 'matrixregular';
+    width: 100%;
+    text-shadow: 2px 0 $highlightColor2;
+    animation: #{$name}-anim-2 2.7s infinite linear alternate-reverse;
+  }
+
+}
