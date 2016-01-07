@@ -1,3 +1,7 @@
+// Hello Barabarian Group! My name is Branden Dane.
+// Thinker. Coffee Drinker. Creative Software Engineer.
+//
+//
 var BarbarianApp = (function(){
 
 ////////////////////////////////////////////////////
@@ -127,15 +131,6 @@ var BarbarianApp = (function(){
                     spansDocFrag.appendChild(hdnMsgDocFrag.childNodes[len4]);
               }
 
-              if (!mainContainer.hasChildNodes() && spansDocFrag.hasChildNodes()){
-                  mainContainer.appendChild(spansDocFrag);
-                  addHiddenMessage();
-              } else if (mainContainer.hasChildNodes() && spansDocFrag.hasChildNodes()){
-                  mainContainer.innerHTML = '';
-                  mainContainer.appendChild(spansDocFrag);
-                  addHiddenMessage();
-              }
-
               function addHiddenMessage() {
                   var hdnMsg = document.querySelectorAll("span[hidden]"),
                   q = 0;
@@ -144,6 +139,15 @@ var BarbarianApp = (function(){
                           hdnMsg[q].textContent = messageValue[q];
                       }
               }
+
+                if (!mainContainer.hasChildNodes() && spansDocFrag.hasChildNodes()){
+                    mainContainer.appendChild(spansDocFrag);
+                    addHiddenMessage();
+                } else if (mainContainer.hasChildNodes() && spansDocFrag.hasChildNodes()){
+                    mainContainer.innerHTML = '';
+                    mainContainer.appendChild(spansDocFrag);
+                    addHiddenMessage();
+                }
 
         }
 
@@ -200,7 +204,9 @@ var BarbarianApp = (function(){
                       bttnR.classList.remove('hide');
                       bttnR.classList.add('show');
                   }
-                  else { bttnE.classList.add('show') }
+                  else {
+                      bttnE.classList.add('show')
+                  }
                   cypherEngine.encrypt();
               }
 
@@ -413,6 +419,8 @@ var hiddenMsgToScreen = function() {
   }();
 
 
+
+
 ////////////////////////////////////////////////////
 // APPLICATION INSTANTIATION
 ////////////////////////////////////////////////////
@@ -430,6 +438,7 @@ function init() {
   terminalUI.create();
 
   decryptionScreen.testIt();
+
 }
 
 return { enterTheMatrix: init }
