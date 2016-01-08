@@ -1,96 +1,252 @@
-// Hello Barabarian Group! My name is Branden Dane.
-// Thinker. Coffee Drinker. Creative Software Engineer.
+/*
+  Hello Barabarian Group!
+  My name is Branden Dane.
+  Thinker. Coffee Drinker. Creative Software Engineer.
+
+  You can view some other fun JavaScript goodness
+  over on my website:
+    http://DaneTheory.com
+  For the best experience, use Chrome.
+
+  Try checking out:
+    http://portfolio.DaneTheory.com
+  on a Tablet, Fablet, or smart phone
+  for an entirely different experience.
+
+  Alright, let's get started!
+*/
+
+// My first thought upon opening quiz.html in browser:
+// <:-|
+// No obvious pattern jumped out at me, so I hopped into web inspector and:
+// m/(>.<)\m
+// Boom. That's a lot of span tags.
+// I noticed a few rogue hidden attributes. Awfully suspicious...
+// Using the console, I logged out the hidden span tags.
+// To make the message a bit more "human readable" on output,
+// I wrote this little snippet:
+/*
+    (function() {
+    	var TheQuestion = {
+    		gottaCatchEmAll: function(selector) {
+    	      var convertArr = Array.prototype.slice.call(document.querySelectorAll(selector));
+            var sentence = [];
+            convertArr.forEach(function(el) {
+              var letters = el.textContent;
+              sentence.push(letters);
+            })
+        var hiddenMessage = sentence.join("");
+        return hiddenMessage;
+        }
+      }
+    return TheQuestion.gottaCatchEmAll('span[hidden]');
+    })();
+*/
+// Which returned:
+/*
+  Use jQuery to unscramble this message. Then, write function that made it. The answer will be an object that can scramble and unscramble
+  any text any number of times.
+*/
+// My reaction:
+// ** insert Horatio Caine sunglasses ASCI art here **
+//
+// I've completed a few coding challenges while job hunting.
+// Rather than just submitting another bland answer out right, I had
+// some fun with this one. I couldn't decide on a creative
+// interface design that I really liked for some time.
+// Already having unscrambled the message in vanilla JS,
+// it felt wrong falling back on jQuery or any other external
+// library for that matter. I hope that's ok.
+// Nothing against libraries. They save time and handle alot of
+// the heavy lifting. I like a good opportunity for a challenge.
+// This answer has a little bit of everything. I wrote out a
+// custom "boilerplate" dev => prod Gulp environment with NodeJS,
+// Used SASS for styling, handled all animations via CSS3
+// including SVG's I designed for the UI, and wrote everything
+// in vanilla JS using OOP practices. All DOM elements are dynamically
+// created.
+//
+// Is it overkill? Yes. Absolutely.
+// It was worth the extra effort. I'd rather be invited to
+// an onsite interview and spend that time learning more about the company,
+// more about the culture, and more about finding where I can be a benefit
+// as a new hire; rather than proving what I have been doing professionally
+// for years. Am I the best out there? No. Do I want to be? Most definately.
+// There's always more to learn.
 //
 //
+// Less talk. More rock. Let's do this.
+
+
+
+// Using an IIFE as a wrapper for the app.
+// The application itself is written using the Revealing Module pattern.
+// The IIFE keeps the global scope clean.
+// The particular Module pattern chosen is one of my favorites.
+// Code ends up cleaner overall, is much easier to read, and offers
+// a nice way to build out functionality in an extensible and
+// reusable components type of fashion.
 var BarbarianApp = (function(){
+
+////////////////////////////////////////////////////
+// APPLICATION UTILTY VARS
+////////////////////////////////////////////////////
+
+  var docBody = document.querySelector('body'),
+      // Status flag for dynamically generated UI
+      uiDOMStatus = false;
+
+
+
+////////////////////////////////////////////////////
+// APPLICATION UI CONFIGURATION
+////////////////////////////////////////////////////
+
+  // Initial user interface elements.
+  // Written as an object to programatically
+  // generate DOM elements and corresponding Attributes,
+  // with the added benefit of having one nice place to
+  // add or remove elements on the fly.
+  var uiEls = {
+        txtInptEl: { elType: "TEXTAREA",
+                     elAttrs: { "type": "text",
+                                "id": "encrypter",
+                                "class": "active",
+                                "name": "hiddenMessage",
+                                "placeholder": "Type Message To Encrypt"
+                              }
+                    },
+        bttnEncrypt: { elType: "BUTTON",
+                       elAttrs: { "id": "bttnEncrypt",
+                                  "class": "show active"
+                                },
+                       elContent: "ENCRYPT"
+                     },
+        bttnDecrypt: { elType: "BUTTON",
+                       elAttrs: { "id": "bttnDecrypt",
+                                  "class": "hide"
+                                },
+                      elContent: "DECRYPT"
+                     },
+        bttnReset: { elType: "BUTTON",
+                     elAttrs: { "id": "bttnReset",
+                                "class": "hide"
+                     },
+                     elContent: "RESET"
+                   },
+        containerEl: { elType: "DIV",
+                       elAttrs: { "id": "mainContainer" }
+                     },
+        backgroundEl: { elType: "DIV",
+                        elAttrs: { "id": "bgContainer" }
+                      }
+    }
+
+    // Object for span element creation used to encrypt
+    // and decrypt a message.
+    var hdnMsgEl = {
+          hiddenSpans: { elType: "SPAN",
+                         elAttrs: { "type": "text",
+                                    "hidden": ""
+                                  }
+                       }
+    }
+
+    // and decrypt a message.
+    var psuedoMsgEl = {
+          visibleSpans: { elType: "SPAN",
+                          elAttrs: { "type": "text" }
+                        }
+    }
+
+
 
 ////////////////////////////////////////////////////
 // APPLICATION UTILTY FUNCTIONS
 ////////////////////////////////////////////////////
 
-    // Set Multiple Attributes In Object Literal Format //
+    // Set multiple attributes to element in object literal format.
+    // Keeps things DRY.
     function setAttributes(el, attrs) {
       for(var key in attrs) {
         el.setAttribute(key, attrs[key]);
       }
     }
 
-    // Generates Random Characters //
+    // Generates random characters
     function randoCharGenerator() {
         var randomChars = "abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWXYZ!@#$%^&*()?{[}]|",
             stringLength = randomChars.length,
             randomNumber = Math.floor(Math.random() * stringLength) + 1;
 
-                return randomChars[randomNumber];
+            return randomChars[randomNumber];
     }
 
+
+
 ////////////////////////////////////////////////////
-// APPLICATION MODEL MODULE
+// APPLICATION UI MODEL MODULE
 ////////////////////////////////////////////////////
 
-    // GENERATE USER INTERFACE //
-    var uiElems = function(){
+  // Generate UI DOM elements from the uiEls Object
+  var uiElems = function(){
 
-        var docBody = document.querySelector('body'),
-            uiDocFrag = document.createDocumentFragment(),
-            txtInptEl = document.createElement("TEXTAREA"),
-            bttnEncrypt = document.createElement("BUTTON"),
-            bttnDecrypt = document.createElement("BUTTON"),
-            bttnReset = document.createElement("BUTTON"),
-            containerEl = document.createElement("DIV"),
-            backgroundEl = document.createElement("DIV");
+    // Manipulating the DOM is expensive.
+    // Appending dynamically created elements
+    // to a document fragment before appending to
+    // the DOM directly saves on performance.
+    // Similar to ReactJS's virtual DOM approach.
+    var uiDocFrag = document.createDocumentFragment();
 
-            setAttributes(txtInptEl, {
-                            "type": "text",
-                            "id": "encrypter",
-                            "class": "active",
-                            "name": "hiddenMessage",
-                            "placeholder": "Type Message To Encrypt"
-            })
-            setAttributes(bttnEncrypt, {
-                            "id": "bttnEncrypt",
-                            "class": "show active"
-            })
-            setAttributes(bttnDecrypt, {
-                            "id": "bttnDecrypt",
-                            "class": "hide"
-            })
-            setAttributes(bttnReset, {
-                            "id": "bttnReset",
-                            "class": "hide"
-            })
-            setAttributes(containerEl, {
-                            "id": "mainContainer"
-            })
-            setAttributes(backgroundEl, {
-                            "id": "bgContainer"
-            })
+      // Programatically create DOM elements and setAttributes
+      function createEls(elObj, elDocFrag, randoGen) {
+        for (component in elObj){
+          var eObj = elObj[component],
+              eType = eObj.elType,
+              eAttrs = eObj.elAttrs,
+              eTxtCnt = eObj.elContent;
 
-
-            bttnEncrypt.textContent = 'ENCRYPT';
-            bttnDecrypt.textContent = 'DECRYPT';
-            bttnReset.textContent = 'RESET';
-
-            uiDocFrag.appendChild(txtInptEl);
-            uiDocFrag.appendChild(bttnEncrypt);
-            uiDocFrag.appendChild(bttnDecrypt);
-            uiDocFrag.appendChild(bttnReset);
-            uiDocFrag.appendChild(containerEl);
-            uiDocFrag.appendChild(backgroundEl);
-
-        function init(){
-            docBody.insertBefore(uiDocFrag, docBody.firstChild);
+          // Create element type
+          component = document.createElement(eType);
+          // Set multiple attributes for element
+          setAttributes(component, eAttrs);
+          // Check if element is "SPAN"
+          // if true, a third parameter is available
+          // for random character generation function.
+          if(eType === "SPAN"){
+            component.textContent = randoGen;
+          } else {
+            component.textContent = eTxtCnt;
+          }
+          // All UI elements now get appended to the Document Fragment.
+          elDocFrag.appendChild(component);
         }
+      }
 
-        return { create:init }
+      // Initialization of helper functions.
+      function init(){
+        createEls(uiEls, uiDocFrag);
+        // Append Doc Frag to DOM
+        docBody.insertBefore(uiDocFrag, docBody.firstChild);
+        // UI ready state flag updated
+        uiDOMStatus = true;
+      }
 
-    }();
+      // Return an aliased Object that runs this Module
+      // to be called where/when needed.
+      // Return callback to allow other modules to instantiate.
+      return { createUI: init,
+               createEls: createEls }
+
+  }();
+
+
 
 ////////////////////////////////////////////////////
 // APPLICATION LOGIC MODULE
 ////////////////////////////////////////////////////
 
-    // BUILD SPAN GENERATOR //
+    // Span tag generation logic module
     var cypherEngine = function() {
 
         function encrypter() {
@@ -106,21 +262,11 @@ var BarbarianApp = (function(){
               j = 0;
 
               for (i, len1 = messageValueLen; i < len1; i++) {
-                var hiddenSpans = document.createElement("SPAN");
-                    setAttributes(hiddenSpans, {
-                      "type": "text",
-                      "hidden": ""
-                    })
-                    hdnMsgDocFrag.appendChild(hiddenSpans);
+                uiElems.createEls(hdnMsgEl, hdnMsgDocFrag);
               }
 
               for (j, len2 = rando; j < len2; j++) {
-                var visibleSpans = document.createElement("SPAN");
-                    setAttributes(visibleSpans, {
-                      "type": "text"
-                    })
-                    visibleSpans.textContent = randoCharGenerator();
-                    hdnMsgDocFrag.appendChild(visibleSpans);
+                uiElems.createEls(psuedoMsgEl, hdnMsgDocFrag, randoCharGenerator());
               }
 
               for (var len3 = hdnMsgDocFrag.childNodes.length - 1; len3 > 0; --len3) {
@@ -420,25 +566,31 @@ var hiddenMsgToScreen = function() {
 
 
 
-
 ////////////////////////////////////////////////////
 // APPLICATION INSTANTIATION
 ////////////////////////////////////////////////////
 
 function init() {
-  // Creates UI Elems //
-  uiElems.create();
-  // Creates Random Generation Logic //
-  cypherEngine.encrypt();
-  // Creates Events That Fire Generation Logic //
-  cypherControls.listen();
-  // Runs TextArea Value To Screen //
-  hiddenMsgToScreen.makeFakeScreen();
-  // Terminal Button Event Control //
-  terminalUI.create();
+  // Check to see if UI flag is false
+  while(!uiDOMStatus){
+    // Invoke creation of UI elements
+    uiElems.createUI();
+  }
+  // Check to see if UI flag is true
+  if (uiDOMStatus){
+    // Creates Random Generation Logic
+    cypherEngine.encrypt();
+    // Creates Events That Fire Generation Logic
+    cypherControls.listen();
 
-  decryptionScreen.testIt();
+    // Runs TextArea Value To Screen
+    hiddenMsgToScreen.makeFakeScreen();
 
+    // Terminal Button Event Control
+    terminalUI.create();
+
+    decryptionScreen.testIt();
+  }
 }
 
 return { enterTheMatrix: init }
